@@ -1,4 +1,4 @@
-package de.entjic;
+package de.entjic.grid.obj;
 
 public class Letter {
     public char gameCharacter;

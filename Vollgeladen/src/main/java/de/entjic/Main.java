@@ -10,7 +10,7 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        FileReader fileReader = new FileReader("hotels5");
+        FileReader fileReader = new FileReader("hotels0");
         Hotel[] hotels = fileReader.getHotels();
         Main main = new Main();
 

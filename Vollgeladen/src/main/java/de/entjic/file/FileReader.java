@@ -20,7 +20,7 @@ public class FileReader {
 
     private List<String> readFile() {
         String current = new File("").getAbsolutePath();
-        File file = new File(current + "\\Vollgeladen\\src\\main\\resources\\examples\\" + fileName + ".txt");
+        File file = new File(current + "/Vollgeladen/src/main/resources/examples/" + fileName + ".txt");
         List<String> list = new ArrayList<>();
         try {
             Scanner scanner = new Scanner(file);

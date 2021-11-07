@@ -165,6 +165,7 @@ public abstract class Grid {
     }
 
     protected List<Letter> getLettersUsedInWordsToPlace() {
+        // TODO: 07.11.21 use set instead of list
         List<Letter> letters = new ArrayList<>();
         for (String word : words) {
             for (char c : word.toCharArray()) {
@@ -177,23 +178,25 @@ public abstract class Grid {
     }
 
 
-    protected Letter calcLetter(Spot spot, List<Letter> lettersUsedInWordsToPlace) {
+    protected Letter calcLetter(Spot spot, List<Letter> lettersToUse) {
         // TODO: 13.09.2021 wenn alle buchstaben in wörtern verwendet werden exception
 
-        if (lettersUsedInWordsToPlace.size() == 0) {
-            System.out.println(lettersUsedInWordsToPlace);
+        if (lettersToUse.size() == 0) {
+            System.out.println(lettersToUse);
             completelyRandom++;
             Letter randomLetter = randomExcept(getLettersUsedInWordsToPlace());
             System.out.println("RANDOM LETTER " + randomLetter + " PLACED ON SPOT " + spot);
             return randomLetter;
         }
         Random random = new Random();
-        Letter letter = lettersUsedInWordsToPlace.get(random.nextInt(lettersUsedInWordsToPlace.size()));
+        Letter letter = lettersToUse.get(random.nextInt(lettersToUse.size()));
+        System.out.println("Current letter: " + letter);
         if (! createsUnwantedWord(spot, letter)) {
             return letter;
         }
-        lettersUsedInWordsToPlace.remove(letter);
-        return calcLetter(spot, lettersUsedInWordsToPlace);
+        System.out.println("Passt nicht");
+        lettersToUse.remove(letter);
+        return calcLetter(spot, lettersToUse);
     }
 
 
@@ -201,7 +204,9 @@ public abstract class Grid {
         int length = getLongestWord();
         letters[spot.y][spot.x] = letter;
         List<Letter[]> snippets = snipAll(spot, length);
+        System.out.println(this);
         for (Letter[] letters : snippets) {
+            System.out.println("Snippet: " + Arrays.toString(letters));
             if (containsWord(letters)) {
                 return true;
             }
@@ -233,19 +238,17 @@ public abstract class Grid {
         int counter = 0;
         for (int i = - length + 1; i < length; i++) {
             Spot current = new Spot(spot.x + direction.getX() * i, spot.y + direction.getY() * i);
-            counter = snip(snippet, counter, i, current);
+            snippet[counter] = snip(current);
+            counter++;
         }
         return snippet;
     }
 
-    protected int snip(Letter[] snippet, int counter, int i, Spot current) {
-        if (i == 0 || current.x < 0 || current.x >= b || current.y < 0 || current.y >= h) {
-            counter++;
-            return counter;
+    protected Letter snip(Spot current) {
+        if (current.x < 0 || current.x >= b || current.y < 0 || current.y >= h) {
+            return null;
         }
-        snippet[counter] = letters[current.y][current.x];
-        counter++;
-        return counter;
+        return letters[current.y][current.x];
     }
 
     protected boolean containsWord(Letter[] letters) {
@@ -254,19 +257,19 @@ public abstract class Grid {
             if (letter == null) continue;
             stringBuilder.append(letter.gameCharacter);
         }
-        if (containsCertainString(stringBuilder.toString())) {
+        if (containsWord(stringBuilder.toString())) {
             return true;
         }
         stringBuilder.reverse();
-        if (containsCertainString(stringBuilder.toString())) {
+        if (containsWord(stringBuilder.toString())) {
             return true;
         }
         return false;
     }
 
-    protected boolean containsCertainString(String string) {
+    protected boolean containsWord(String string) {
         for (Word word : placedWords.keySet()) {
-            if (word.value.equals(string)) {
+            if (string.contains(word.value)) {
                 return true;
             }
         }
@@ -323,7 +326,7 @@ public abstract class Grid {
             stringBuilder.append(Arrays.toString(letters)).append("\n");
         }
         return "Grid{" +
-                "words=" + Arrays.toString(words) +
+                "words=" + placedWords +
                 ", h=" + h +
                 ", b=" + b +
                 ", chars=\n" + stringBuilder +

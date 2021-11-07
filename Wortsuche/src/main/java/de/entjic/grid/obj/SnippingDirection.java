@@ -1,10 +1,11 @@
 package de.entjic.grid.obj;
 
 public enum SnippingDirection {
-    VERTICAL(1, 0),
-    HORIZONTAL(0, 1),
-    DIAGONALRTL(1, 1),
-    DIAGONALLTR(- 1, - 1);
+    HORIZONTAL(1, 0),
+    VERTICAL(0, 1),
+    DIAGONALLTR(1, 1),
+    DIAGONALRTL(-1, 1);
+
 
     private final int x, y;
 

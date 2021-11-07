@@ -9,4 +9,12 @@ public class Word {
         this.value = value;
         this.direction = direction;
     }
+
+    @Override
+    public String toString() {
+        return "Word{" +
+                "value='" + value + '\'' +
+                ", direction=" + direction +
+                '}';
+    }
 }

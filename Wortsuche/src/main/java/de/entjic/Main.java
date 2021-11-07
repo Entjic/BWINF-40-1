@@ -7,7 +7,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        String fileName = "worte6";
+        String fileName = "worte5";
         FileReader reader = new FileReader(fileName);
 //        Grid easyGrid = new EasyGrid(reader.getHeight(), reader.getWidth(), reader.getWords());
 //        System.out.println("---EASY---");
